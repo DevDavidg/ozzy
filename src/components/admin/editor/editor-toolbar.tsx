@@ -30,16 +30,16 @@ const statusColor: Record<SaveStatus, string> = {
 };
 
 export const EditorToolbar = ({ brandName, userEmail, saveStatus }: EditorToolbarProps) => (
-  <header className="sticky top-0 z-50 border-b border-[#17120d]/10 bg-[#17120d] text-[#f5efe6]">
-    <div className="mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-4 px-5 py-3">
+  <header className="sticky top-0 z-50 border-b border-white/10 bg-foreground/95 text-primary-foreground backdrop-blur-md">
+    <div className="mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-4 px-5 py-3.5">
       <div>
-        <p className="text-[10px] font-black uppercase tracking-[0.28em] text-[#d2bd9f]">
+        <p className="text-[10px] font-black uppercase tracking-[0.28em] text-secondary">
           Canvas editable
         </p>
-        <h1 className="text-xl font-black tracking-[-0.04em]">{brandName}</h1>
+        <h1 className="font-display text-xl font-black tracking-[-0.04em]">{brandName}</h1>
       </div>
 
-      <div className="hidden items-center gap-4 text-sm text-[#d2bd9f] lg:flex">
+      <div className="hidden items-center gap-4 text-sm text-secondary lg:flex">
         <Tooltip>
           <TooltipTrigger asChild>
             <span className="inline-flex items-center gap-2">
@@ -71,14 +71,14 @@ export const EditorToolbar = ({ brandName, userEmail, saveStatus }: EditorToolba
         >
           {statusLabel[saveStatus]}
         </span>
-        <span className="hidden text-sm text-[#d2bd9f] md:inline">{userEmail}</span>
-        <Button asChild variant="outline" size="sm" className="border-[#f5efe6]/30 bg-transparent text-[#f5efe6] hover:bg-[#f5efe6] hover:text-[#17120d]">
+        <span className="hidden text-sm text-secondary md:inline">{userEmail}</span>
+        <Button asChild variant="outline" size="sm" className="border-primary-foreground/25 bg-transparent text-primary-foreground hover:bg-primary-foreground hover:text-foreground">
           <Link href="/admin/manage">
             <LayoutGrid aria-hidden />
             Gestión
           </Link>
         </Button>
-        <Button asChild variant="outline" size="sm" className="border-[#f5efe6]/30 bg-transparent text-[#f5efe6] hover:bg-[#f5efe6] hover:text-[#17120d]">
+        <Button asChild variant="outline" size="sm" className="border-primary-foreground/25 bg-transparent text-primary-foreground hover:bg-primary-foreground hover:text-foreground">
           <Link href="/" target="_blank">
             <ExternalLink aria-hidden />
             Ver publicada

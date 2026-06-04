@@ -1,5 +1,8 @@
 import type { ReactNode } from 'react';
 
+import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
+
 type FieldProps = {
   label: string;
   name: string;
@@ -8,10 +11,23 @@ type FieldProps = {
   required?: boolean;
 };
 
-export const Card = ({ title, children }: { title: string; children: ReactNode }) => (
-  <section className="rounded-[1.5rem] border border-[#17120d]/10 bg-white/70 p-6 shadow-sm">
-    <h2 className="text-2xl font-black tracking-[-0.04em]">{title}</h2>
-    <div className="mt-5">{children}</div>
+export const Card = ({
+  title,
+  description,
+  children,
+}: {
+  title: string;
+  description?: string;
+  children: ReactNode;
+}) => (
+  <section className="overflow-hidden rounded-[1.5rem] border border-border bg-card/80 shadow-sm">
+    <div className="border-b border-border bg-muted/30 px-6 py-5">
+      <h2 className="font-display text-xl font-black tracking-[-0.04em] md:text-2xl">{title}</h2>
+      {description ? (
+        <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+      ) : null}
+    </div>
+    <div className="p-6">{children}</div>
   </section>
 );
 
@@ -23,13 +39,13 @@ export const Field = ({
   required = true,
 }: FieldProps) => (
   <label className="block">
-    <span className="text-xs font-black uppercase tracking-[0.18em] text-[#8b5e34]">{label}</span>
-    <input
+    <span className="text-xs font-black uppercase tracking-[0.18em] text-accent">{label}</span>
+    <Input
       name={name}
       type={type}
       defaultValue={defaultValue}
       required={required}
-      className="mt-2 w-full rounded-2xl border border-[#17120d]/15 bg-white px-4 py-3 text-sm"
+      className="mt-2"
     />
   </label>
 );
@@ -41,12 +57,14 @@ export const TextArea = ({
   rows = 4,
 }: FieldProps & { rows?: number }) => (
   <label className="block">
-    <span className="text-xs font-black uppercase tracking-[0.18em] text-[#8b5e34]">{label}</span>
+    <span className="text-xs font-black uppercase tracking-[0.18em] text-accent">{label}</span>
     <textarea
       name={name}
       defaultValue={defaultValue}
       rows={rows}
-      className="mt-2 w-full rounded-2xl border border-[#17120d]/15 bg-white px-4 py-3 text-sm"
+      className={cn(
+        'mt-2 flex w-full rounded-2xl border border-input bg-white px-4 py-3 text-sm text-foreground transition-colors placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+      )}
     />
   </label>
 );
@@ -60,8 +78,13 @@ export const Checkbox = ({
   name: string;
   defaultChecked: boolean;
 }) => (
-  <label className="flex items-center gap-3 rounded-2xl border border-[#17120d]/10 bg-white px-4 py-3 text-sm font-bold">
-    <input name={name} type="checkbox" defaultChecked={defaultChecked} className="size-4 accent-[#17120d]" />
+  <label className="flex cursor-pointer items-center gap-3 rounded-2xl border border-border bg-white px-4 py-3 text-sm font-bold transition hover:border-accent/30 hover:bg-muted/30">
+    <input
+      name={name}
+      type="checkbox"
+      defaultChecked={defaultChecked}
+      className="size-4 accent-foreground"
+    />
     {label}
   </label>
 );
@@ -69,7 +92,7 @@ export const Checkbox = ({
 export const SaveButton = ({ label = 'Guardar cambios' }: { label?: string }) => (
   <button
     type="submit"
-    className="rounded-full bg-[#17120d] px-6 py-3 text-sm font-black uppercase tracking-[0.18em] text-[#f5efe6] transition hover:scale-[1.01]"
+    className="inline-flex items-center justify-center rounded-full bg-foreground px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-primary-foreground transition hover:opacity-90 active:scale-[0.98]"
   >
     {label}
   </button>

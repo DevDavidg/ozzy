@@ -17,7 +17,7 @@ export const ProductForms = ({ data }: { data: SiteData }) => (
     <Card title="Productos existentes">
       <div className="grid gap-5">
         {data.products.map((product) => (
-          <div key={product.id} className="rounded-[1.25rem] border border-[#17120d]/10 p-4">
+          <div key={product.id} className="rounded-[1.25rem] border border-border bg-muted/20 p-5">
             <ProductForm product={product} categories={data.categories} />
             <div className="mt-3">
               <DeleteConfirmButton
@@ -50,11 +50,11 @@ const ProductForm = ({
     <Field label="Badge" name="badge" defaultValue={product?.badge ?? ''} required={false} />
     <Field label="Orden" name="sortOrder" type="number" defaultValue={product?.sortOrder ?? 0} />
     <label className="block">
-      <span className="text-xs font-black uppercase tracking-[0.18em] text-[#8b5e34]">Categoría</span>
+      <span className="text-xs font-black uppercase tracking-[0.18em] text-accent">Categoría</span>
       <select
         name="categoryId"
         defaultValue={product?.categoryId ?? categories[0]?.id}
-        className="mt-2 w-full rounded-2xl border border-[#17120d]/15 bg-white px-4 py-3 text-sm"
+        className="mt-2 flex h-11 w-full rounded-2xl border border-input bg-white px-4 py-3 text-sm text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         {categories.map((category) => (
           <option key={category.id} value={category.id}>
@@ -88,7 +88,7 @@ const CategoryManager = ({ categories }: { categories: StoreCategory[] }) => (
         </div>
       </form>
       {categories.map((category) => (
-        <div key={category.id} className="rounded-[1.25rem] border border-[#17120d]/10 p-4">
+        <div key={category.id} className="rounded-[1.25rem] border border-border bg-muted/20 p-5">
           <form action={saveCategoryAction} className="grid gap-4 md:grid-cols-4">
             <input type="hidden" name="id" value={category.id} />
             <Field label="Nombre" name="name" defaultValue={category.name} />

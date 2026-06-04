@@ -20,8 +20,8 @@ const EditorCanvasInner = ({ userEmail }: { userEmail: string }) => {
         userEmail={userEmail}
         saveStatus={saveStatus}
       />
-      <div className="bg-[#111] px-3 py-6 md:px-6">
-        <div className="editor-canvas mx-auto max-w-[1400px] overflow-hidden rounded-2xl border border-white/10 shadow-2xl shadow-black/40">
+      <div className="bg-[#0d0d0d] px-3 py-6 md:px-6">
+        <div className="editor-canvas mx-auto max-w-[1400px] overflow-hidden rounded-2xl border border-white/10 shadow-2xl shadow-black/50 ring-1 ring-white/5">
           <Storefront data={data} editable />
         </div>
       </div>

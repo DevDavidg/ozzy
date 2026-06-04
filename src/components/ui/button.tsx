@@ -5,17 +5,17 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17120d]/30 disabled:pointer-events-none disabled:opacity-60 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-60 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
   {
     variants: {
       variant: {
-        default: 'bg-[#17120d] text-[#f5efe6] hover:bg-[#2a221b]',
+        default: 'bg-foreground text-primary-foreground hover:bg-foreground/90',
         destructive: 'bg-red-600 text-white hover:bg-red-700',
         outline:
-          'border border-[#17120d]/20 bg-white text-[#17120d] hover:bg-[#f5efe6]',
-        secondary: 'bg-[#d2bd9f] text-[#17120d] hover:bg-[#c4ad8f]',
-        ghost: 'text-[#17120d] hover:bg-[#17120d]/5',
-        link: 'text-[#8b5e34] underline-offset-4 hover:underline',
+          'border border-border bg-card text-foreground hover:bg-muted',
+        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        ghost: 'text-foreground hover:bg-muted',
+        link: 'text-accent underline-offset-4 hover:underline',
       },
       size: {
         default: 'h-11 px-6 py-2',

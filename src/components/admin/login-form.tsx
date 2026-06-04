@@ -74,7 +74,7 @@ export const LoginForm = () => {
         ) : null}
       </div>
       {state.message ? (
-        <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-700" role="alert">
+        <p className="rounded-2xl border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm font-semibold text-destructive" role="alert">
           {state.message}
         </p>
       ) : null}

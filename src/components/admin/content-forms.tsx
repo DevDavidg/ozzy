@@ -87,7 +87,7 @@ export const ContentForms = ({ data }: { data: SiteData }) => {
       <Card title="Beneficios">
         <form action={updateBenefitsAction} className="grid gap-4 md:grid-cols-3">
           {benefits.items.map((item, index) => (
-            <div key={item.title} className="space-y-4 rounded-2xl border border-[#17120d]/10 p-4">
+            <div key={item.title} className="space-y-4 rounded-2xl border border-border bg-muted/20 p-4">
               <Field label={`Título ${index + 1}`} name={`benefitTitle${index}`} defaultValue={item.title} />
               <TextArea
                 label={`Descripción ${index + 1}`}

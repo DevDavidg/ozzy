@@ -2,26 +2,28 @@
 @plugin "tailwindcss-animate";
 
 :root {
-  --background: #f5efe6;
-  --foreground: #17120d;
+  --background: #fafafa;
+  --foreground: #0a0a0a;
   --card: #ffffff;
-  --card-foreground: #17120d;
+  --card-foreground: #0a0a0a;
   --popover: #ffffff;
-  --popover-foreground: #17120d;
-  --primary: #17120d;
-  --primary-foreground: #f5efe6;
-  --secondary: #d2bd9f;
-  --secondary-foreground: #17120d;
-  --muted: #f0dfc9;
-  --muted-foreground: #5d5146;
-  --accent: #8b5e34;
-  --accent-foreground: #f5efe6;
+  --popover-foreground: #0a0a0a;
+  --primary: #0a0a0a;
+  --primary-foreground: #fafafa;
+  --secondary: #d4d4d8;
+  --secondary-foreground: #0a0a0a;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --accent: #52525b;
+  --accent-foreground: #fafafa;
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
-  --border: rgba(23, 18, 13, 0.15);
-  --input: rgba(23, 18, 13, 0.15);
-  --ring: rgba(23, 18, 13, 0.2);
-  --radius: 1rem;
+  --border: rgba(10, 10, 10, 0.08);
+  --input: rgba(10, 10, 10, 0.1);
+  --ring: rgba(10, 10, 10, 0.15);
+  --radius: 0.75rem;
+  --hero: #0a0a0a;
+  --hero-foreground: #fafafa;
 }
 
 @theme inline {
@@ -44,18 +46,46 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-hero: var(--hero);
+  --color-hero-foreground: var(--hero-foreground);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-poppins), "Poppins", system-ui, sans-serif;
+  --font-display: var(--font-poppins), "Poppins", system-ui, sans-serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.text-label {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.brand-wordmark {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  color: var(--foreground);
 }
 
 button,
@@ -63,7 +93,7 @@ a,
 input,
 textarea,
 select {
-  outline-color: #17120d;
+  outline-color: var(--foreground);
 }
 
 html {
@@ -79,6 +109,29 @@ html {
   }
 }
 
+.marquee-track {
+  animation: marquee 26s linear infinite;
+}
+
+.marquee-track-slow {
+  animation: marquee 30s linear infinite;
+}
+
+.marquee-track:hover,
+.marquee-track-slow:hover {
+  animation-play-state: paused;
+}
+
+.reveal-hidden {
+  opacity: 0;
+  transform: translateY(1.25rem);
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -90,5 +143,10 @@ html {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .reveal-hidden {
+    opacity: 1;
+    transform: none;
   }
 }
