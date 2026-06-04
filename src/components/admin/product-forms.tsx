@@ -48,6 +48,7 @@ const ProductForm = ({
     <Field label="Nombre" name="name" defaultValue={product?.name ?? ''} />
     <Field label="Slug" name="slug" defaultValue={product?.slug ?? ''} required={false} />
     <Field label="Precio" name="price" type="number" defaultValue={product?.price ?? 0} />
+    <Field label="Stock" name="stock" type="number" defaultValue={product?.stock ?? 0} />
     <Field label="Badge" name="badge" defaultValue={product?.badge ?? ''} required={false} />
     <Field label="Orden" name="sortOrder" type="number" defaultValue={product?.sortOrder ?? 0} />
     <label className="block">

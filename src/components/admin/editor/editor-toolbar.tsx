@@ -1,6 +1,6 @@
 'use client';
 
-import { ExternalLink, LayoutGrid, LogOut, MousePointerClick, Type } from 'lucide-react';
+import { BarChart3, ExternalLink, LayoutGrid, LogOut, MousePointerClick, Type } from 'lucide-react';
 import Link from 'next/link';
 
 import { logoutAction } from '@/app/admin/actions';
@@ -72,6 +72,12 @@ export const EditorToolbar = ({ brandName, userEmail, saveStatus }: EditorToolba
           {statusLabel[saveStatus]}
         </span>
         <span className="hidden text-sm text-secondary md:inline">{userEmail}</span>
+        <Button asChild variant="outline" size="sm" className="border-primary-foreground/25 bg-transparent text-primary-foreground hover:bg-primary-foreground hover:text-foreground">
+          <Link href="/admin/dashboard">
+            <BarChart3 aria-hidden />
+            Ventas
+          </Link>
+        </Button>
         <Button asChild variant="outline" size="sm" className="border-primary-foreground/25 bg-transparent text-primary-foreground hover:bg-primary-foreground hover:text-foreground">
           <Link href="/admin/manage">
             <LayoutGrid aria-hidden />

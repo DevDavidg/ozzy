@@ -17,7 +17,7 @@ const fallbackBag: BagContent = {
   emptyCta: 'Explorar colección',
   emptyCtaHref: '/tienda',
   checkoutCta: 'Finalizar compra',
-  checkoutHref: '/#contacto',
+  checkoutHref: '/checkout',
 };
 
 const sectionTitles: Record<string, string> = {
@@ -42,7 +42,7 @@ const fallbackSettings: GlobalSettings = {
     { label: 'Tienda', href: '/tienda' },
     { label: 'Contacto', href: '/#contacto' },
     { label: 'Mi bolsa', href: '/bolsa' },
-    { label: 'Mi cuenta', href: '/login' },
+    { label: 'Mi cuenta', href: '/cuenta' },
   ],
 };
 
@@ -130,6 +130,7 @@ const buildSiteData = async (): Promise<SiteData> => {
     slug: product.slug,
     description: product.description,
     price: product.price,
+    stock: product.stock,
     badge: product.badge,
     imageUrl: product.imageUrl,
     gallery: parseJsonArray(product.gallery),
@@ -226,6 +227,7 @@ export const saveProduct = async (formData: FormData) => {
     slug: formData.get('slug') || slugify(formData.get('name')?.toString() ?? ''),
     description: formData.get('description'),
     price: formData.get('price'),
+    stock: formData.get('stock'),
     badge: formData.get('badge')?.toString() || null,
     imageUrl: formData.get('imageUrl'),
     isFeatured: formData.get('isFeatured') === 'on',
@@ -239,6 +241,7 @@ export const saveProduct = async (formData: FormData) => {
     slug: payload.slug,
     description: payload.description,
     price: payload.price,
+    stock: payload.stock,
     badge: payload.badge,
     imageUrl: payload.imageUrl,
     gallery: [payload.imageUrl],
@@ -301,6 +304,7 @@ export const getProductBySlug = async (slug: string) => {
       slug: product.slug,
       description: product.description,
       price: product.price,
+      stock: product.stock,
       badge: product.badge,
       imageUrl: product.imageUrl,
       gallery: parseJsonArray(product.gallery),
@@ -356,6 +360,7 @@ export const getVisibleProducts = async (categorySlug?: string) => {
       slug: product.slug,
       description: product.description,
       price: product.price,
+      stock: product.stock,
       badge: product.badge,
       imageUrl: product.imageUrl,
       gallery: parseJsonArray(product.gallery),

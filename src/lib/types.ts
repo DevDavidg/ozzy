@@ -112,6 +112,7 @@ export type StoreProduct = {
   slug: string;
   description: string;
   price: number;
+  stock: number;
   badge: string | null;
   imageUrl: string;
   gallery: string[];
@@ -120,6 +121,46 @@ export type StoreProduct = {
   sortOrder: number;
   categoryId: string;
   categoryName: string;
+};
+
+export type OrderStatus = 'PENDING' | 'CONFIRMED' | 'SHIPPED' | 'CANCELLED';
+
+export type CustomerOrder = {
+  id: string;
+  orderNumber: string;
+  status: OrderStatus;
+  subtotal: number;
+  createdAt: string;
+  itemCount: number;
+};
+
+export type AdminOrderItem = {
+  id: string;
+  productName: string;
+  productSlug: string;
+  quantity: number;
+  unitPrice: number;
+  lineTotal: number;
+};
+
+export type AdminOrder = {
+  id: string;
+  orderNumber: string;
+  status: OrderStatus;
+  subtotal: number;
+  notes: string | null;
+  createdAt: string;
+  customerName: string;
+  customerEmail: string;
+  items: AdminOrderItem[];
+};
+
+export type CommerceStats = {
+  totalOrders: number;
+  pendingOrders: number;
+  confirmedRevenue: number;
+  totalUnitsSold: number;
+  lowStockProducts: { id: string; name: string; stock: number }[];
 };
 
 export type SiteData = {

@@ -3,13 +3,19 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 import { LoginForm } from '@/components/admin/login-form';
+import { UserRole } from '@prisma/client';
+
 import { getCurrentUser } from '@/lib/auth';
 
 export default async function LoginPage() {
   const user = await getCurrentUser();
 
-  if (user) {
+  if (user?.role === UserRole.ADMIN) {
     redirect('/admin');
+  }
+
+  if (user?.role === UserRole.CUSTOMER) {
+    redirect('/cuenta');
   }
 
   return (

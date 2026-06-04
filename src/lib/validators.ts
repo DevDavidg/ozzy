@@ -65,7 +65,7 @@ export const bagContentSchema = z.object({
   emptyCta: z.string().min(1),
   emptyCtaHref: z.string().min(1).default('/tienda'),
   checkoutCta: z.string().min(1),
-  checkoutHref: z.string().min(1).default('/#contacto'),
+  checkoutHref: z.string().min(1).default('/checkout'),
 });
 
 const navigationLinkSchema = z.object({
@@ -85,12 +85,30 @@ export const productSchema = z.object({
   slug: z.string().min(1),
   description: z.string().min(1),
   price: z.coerce.number().int().min(0),
+  stock: z.coerce.number().int().min(0).default(0),
   badge: z.string().nullable().optional(),
   imageUrl: z.string().min(1),
   isFeatured: z.coerce.boolean().default(false),
   isVisible: z.coerce.boolean().default(true),
   sortOrder: z.coerce.number().int().default(0),
   categoryId: z.string().min(1),
+});
+
+export const registerSchema = z
+  .object({
+    name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres.'),
+    email: z.string().email('Ingresá un email válido.'),
+    password: z.string().min(8, 'La contraseña debe tener al menos 8 caracteres.'),
+    confirmPassword: z.string().min(1, 'Confirmá tu contraseña.'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Las contraseñas no coinciden.',
+    path: ['confirmPassword'],
+  });
+
+export const checkoutItemSchema = z.object({
+  productId: z.string().min(1),
+  quantity: z.coerce.number().int().min(1),
 });
 
 export const categorySchema = z.object({

@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { ProductCard } from '@/components/storefront/product-card';
 import { StoreShell } from '@/components/storefront/store-shell';
 import { TemporaryUnavailable } from '@/components/storefront/temporary-unavailable';
+import { getAccountNavProps } from '@/lib/account-nav';
 import { fetchSiteData, getCategoryBySlug, getVisibleProducts } from '@/lib/site-data';
 
 type CategoryPageProps = {
@@ -12,10 +13,11 @@ type CategoryPageProps = {
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params;
-  const [{ data, isFallback }, category, products] = await Promise.all([
+  const [{ data, isFallback }, category, products, accountNav] = await Promise.all([
     fetchSiteData(),
     getCategoryBySlug(slug),
     getVisibleProducts(slug),
+    getAccountNavProps(),
   ]);
 
   if (!category) {
@@ -33,7 +35,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   }
 
   return (
-    <StoreShell data={data}>
+    <StoreShell data={data} {...accountNav}>
       <div className="mx-auto max-w-7xl px-5 py-16">
         <nav aria-label="Miga de pan" className="mb-6 text-sm text-muted-foreground">
           <Link href="/" className="transition hover:text-foreground">

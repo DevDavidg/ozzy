@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { isUnoptimizedImageUrl } from '@/lib/image-url';
+import { cn } from '@/lib/utils';
 import { ImagePlus, Loader2, Upload } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';

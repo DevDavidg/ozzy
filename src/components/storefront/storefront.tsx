@@ -28,6 +28,8 @@ type StorefrontProps = {
   data: SiteData;
   editable?: boolean;
   showFallbackBanner?: boolean;
+  loginHref?: string;
+  loginLabel?: string;
 };
 
 const BENEFIT_ICONS = [Truck, RefreshCw, ShieldCheck] as const;
@@ -39,6 +41,8 @@ export const Storefront = ({
   data,
   editable = false,
   showFallbackBanner = false,
+  loginHref,
+  loginLabel,
 }: StorefrontProps) => {
   const hero = getContent<HeroContent>(data, 'hero');
   const ticker = getContent<TickerContent>(data, 'ticker');
@@ -56,7 +60,13 @@ export const Storefront = ({
   const Text = editable ? EditableText : StaticText;
 
   return (
-    <StoreShell data={data} editable={editable} showFallbackBanner={showFallbackBanner}>
+    <StoreShell
+      data={data}
+      editable={editable}
+      showFallbackBanner={showFallbackBanner}
+      loginHref={loginHref}
+      loginLabel={loginLabel}
+    >
       <section
         id="inicio"
         className="relative overflow-hidden bg-hero text-hero-foreground"

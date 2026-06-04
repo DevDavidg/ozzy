@@ -7,6 +7,8 @@ type StoreShellProps = {
   data: SiteData;
   editable?: boolean;
   showFallbackBanner?: boolean;
+  loginHref?: string;
+  loginLabel?: string;
   children: React.ReactNode;
 };
 
@@ -17,11 +19,11 @@ export const StoreShell = ({
   data,
   editable = false,
   showFallbackBanner = false,
+  loginHref = editable ? '/admin' : '/cuenta/ingresar',
+  loginLabel = editable ? 'Editando' : 'Iniciar sesión',
   children,
 }: StoreShellProps) => {
   const footer = getContent<FooterContent>(data, 'footer');
-  const loginHref = editable ? '/admin' : '/login';
-  const loginLabel = editable ? 'Editando' : 'Iniciar sesión';
 
   return (
     <div className="min-h-screen bg-background text-foreground">

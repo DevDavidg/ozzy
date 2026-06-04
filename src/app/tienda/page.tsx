@@ -3,12 +3,14 @@ import Link from 'next/link';
 import { ProductCard } from '@/components/storefront/product-card';
 import { StoreShell } from '@/components/storefront/store-shell';
 import { TemporaryUnavailable } from '@/components/storefront/temporary-unavailable';
+import { getAccountNavProps } from '@/lib/account-nav';
 import { fetchSiteData, getVisibleProducts } from '@/lib/site-data';
 
 export default async function TiendaPage() {
-  const [{ data, isFallback }, products] = await Promise.all([
+  const [{ data, isFallback }, products, accountNav] = await Promise.all([
     fetchSiteData(),
     getVisibleProducts(),
+    getAccountNavProps(),
   ]);
 
   if (isFallback) {
@@ -22,7 +24,7 @@ export default async function TiendaPage() {
   }
 
   return (
-    <StoreShell data={data}>
+    <StoreShell data={data} {...accountNav}>
       <div className="mx-auto max-w-7xl px-5 py-16">
         <nav aria-label="Miga de pan" className="mb-6 text-sm text-muted-foreground">
           <Link href="/" className="transition hover:text-foreground">

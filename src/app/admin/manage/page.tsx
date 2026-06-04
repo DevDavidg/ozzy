@@ -1,20 +1,24 @@
 import Link from 'next/link';
-import { ArrowLeft, Paintbrush, Sparkles } from 'lucide-react';
+import { ArrowLeft, BarChart3, Paintbrush, Sparkles } from 'lucide-react';
 
 import { AdminTabs } from '@/components/admin/admin-tabs';
+import { CommerceDashboard } from '@/components/admin/commerce-dashboard';
 import { ContentForms } from '@/components/admin/content-forms';
 import { MediaManager } from '@/components/admin/media-manager';
 import { ProductForms } from '@/components/admin/product-forms';
 import { Button } from '@/components/ui/button';
 import { requireAdmin } from '@/lib/auth';
 import { prisma } from '@/lib/db';
+import { getAdminOrders, getCommerceStats } from '@/lib/orders';
 import { getSiteData } from '@/lib/site-data';
 
 export default async function AdminManagePage() {
   await requireAdmin();
-  const [data, assets] = await Promise.all([
+  const [data, assets, stats, orders] = await Promise.all([
     getSiteData(),
     prisma.mediaAsset.findMany({ orderBy: { createdAt: 'desc' } }),
+    getCommerceStats(),
+    getAdminOrders(),
   ]);
 
   return (
@@ -30,16 +34,28 @@ export default async function AdminManagePage() {
               {data.settings.brandName}
             </h1>
           </div>
-          <Button
-            asChild
-            variant="outline"
-            className="border-primary-foreground/25 bg-transparent text-primary-foreground hover:bg-primary-foreground hover:text-foreground"
-          >
-            <Link href="/admin">
-              <ArrowLeft aria-hidden />
-              Volver al canvas
-            </Link>
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button
+              asChild
+              variant="outline"
+              className="border-primary-foreground/25 bg-transparent text-primary-foreground hover:bg-primary-foreground hover:text-foreground"
+            >
+              <Link href="/admin/dashboard">
+                <BarChart3 aria-hidden />
+                Dashboard
+              </Link>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              className="border-primary-foreground/25 bg-transparent text-primary-foreground hover:bg-primary-foreground hover:text-foreground"
+            >
+              <Link href="/admin">
+                <ArrowLeft aria-hidden />
+                Canvas
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -57,6 +73,9 @@ export default async function AdminManagePage() {
         </div>
 
         <AdminTabs
+          commerce={
+            <CommerceDashboard stats={stats} orders={orders} products={data.products} />
+          }
           media={<MediaManager assets={assets} />}
           products={<ProductForms data={data} />}
           content={<ContentForms data={data} />}

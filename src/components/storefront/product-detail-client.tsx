@@ -18,8 +18,15 @@ type ProductDetailClientProps = {
 export const ProductDetailClient = ({ product }: ProductDetailClientProps) => {
   const cart = useCart();
   const [quantity, setQuantity] = useState(1);
+  const isOutOfStock = product.stock <= 0;
+  const maxQuantity = Math.max(product.stock, 0);
 
   const handleAddToCart = () => {
+    if (isOutOfStock) {
+      toast.error('Este producto no tiene stock disponible');
+      return;
+    }
+
     cart.addItem(product, quantity);
     toast.success(
       quantity === 1
@@ -33,7 +40,7 @@ export const ProductDetailClient = ({ product }: ProductDetailClientProps) => {
   };
 
   const handleIncrease = () => {
-    setQuantity((current) => current + 1);
+    setQuantity((current) => Math.min(maxQuantity, current + 1));
   };
 
   return (
@@ -65,6 +72,13 @@ export const ProductDetailClient = ({ product }: ProductDetailClientProps) => {
           {product.name}
         </h1>
         <p className="mt-4 text-2xl font-semibold">{formatPrice(product.price)}</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {isOutOfStock
+            ? 'Sin stock'
+            : product.stock <= 5
+              ? `Últimas ${product.stock} unidades`
+              : `${product.stock} unidades disponibles`}
+        </p>
         <p className="mt-6 leading-8 text-muted-foreground">{product.description}</p>
 
         <div className="mt-8 flex items-center gap-4">
@@ -81,7 +95,8 @@ export const ProductDetailClient = ({ product }: ProductDetailClientProps) => {
             <button
               type="button"
               onClick={handleIncrease}
-              className="flex size-10 items-center justify-center transition hover:bg-muted"
+              disabled={quantity >= maxQuantity || isOutOfStock}
+              className="flex size-10 items-center justify-center transition hover:bg-muted disabled:opacity-40"
               aria-label="Aumentar cantidad"
             >
               <Plus className="size-4" aria-hidden />
@@ -94,11 +109,12 @@ export const ProductDetailClient = ({ product }: ProductDetailClientProps) => {
             type="button"
             size="lg"
             onClick={handleAddToCart}
+            disabled={isOutOfStock}
             className="gap-2"
             aria-label={`Agregar ${product.name} a la bolsa`}
           >
             <ShoppingBag className="size-4" aria-hidden />
-            Agregar a la bolsa
+            {isOutOfStock ? 'Sin stock' : 'Agregar a la bolsa'}
           </Button>
           <Button type="button" variant="outline" size="lg" asChild>
             <Link href="/bolsa">Ver bolsa</Link>

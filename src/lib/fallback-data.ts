@@ -161,7 +161,7 @@ export const fallbackSiteData: SiteData = {
       { label: 'Tienda', href: '/tienda' },
       { label: 'Contacto', href: '/#contacto' },
       { label: 'Mi bolsa', href: '/bolsa' },
-      { label: 'Mi cuenta', href: '/login' },
+      { label: 'Mi cuenta', href: '/cuenta' },
     ],
   },
   sections: fallbackSections,

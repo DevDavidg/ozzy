@@ -6,6 +6,7 @@ import {
 } from '@/components/storefront/product-detail-client';
 import { StoreShell } from '@/components/storefront/store-shell';
 import { TemporaryUnavailable } from '@/components/storefront/temporary-unavailable';
+import { getAccountNavProps } from '@/lib/account-nav';
 import { fetchSiteData, getProductBySlug } from '@/lib/site-data';
 
 type ProductPageProps = {
@@ -14,9 +15,10 @@ type ProductPageProps = {
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
-  const [{ data, isFallback }, product] = await Promise.all([
+  const [{ data, isFallback }, product, accountNav] = await Promise.all([
     fetchSiteData(),
     getProductBySlug(slug),
+    getAccountNavProps(),
   ]);
 
   if (!product) {
@@ -34,7 +36,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   return (
-    <StoreShell data={data}>
+    <StoreShell data={data} {...accountNav}>
       <div className="mx-auto max-w-7xl px-5 py-16">
         <ProductBackLink />
         <ProductDetailClient product={product} />

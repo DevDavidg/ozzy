@@ -1,28 +1,31 @@
 'use client';
 
-import { ImageIcon, LayoutGrid, Package, Settings2 } from 'lucide-react';
+import { BarChart3, ImageIcon, Package, Settings2 } from 'lucide-react';
 import { useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
-type AdminTab = 'media' | 'products' | 'content';
+type AdminTab = 'commerce' | 'media' | 'products' | 'content';
 
 type AdminTabsProps = {
+  commerce: React.ReactNode;
   media: React.ReactNode;
   products: React.ReactNode;
   content: React.ReactNode;
 };
 
 const tabs: { id: AdminTab; label: string; icon: typeof Package }[] = [
+  { id: 'commerce', label: 'Ventas', icon: BarChart3 },
   { id: 'media', label: 'Imágenes', icon: ImageIcon },
   { id: 'products', label: 'Productos', icon: Package },
   { id: 'content', label: 'Contenido', icon: Settings2 },
 ];
 
-export const AdminTabs = ({ media, products, content }: AdminTabsProps) => {
-  const [active, setActive] = useState<AdminTab>('media');
+export const AdminTabs = ({ commerce, media, products, content }: AdminTabsProps) => {
+  const [active, setActive] = useState<AdminTab>('commerce');
 
   const panels: Record<AdminTab, React.ReactNode> = {
+    commerce,
     media,
     products,
     content,

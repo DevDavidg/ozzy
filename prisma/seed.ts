@@ -17,8 +17,13 @@ const main = async () => {
 
   await prisma.user.upsert({
     where: { email: adminEmail },
-    update: { name: 'Admin Ozzy Gist', passwordHash },
-    create: { email: adminEmail, name: 'Admin Ozzy Gist', passwordHash },
+    update: { name: 'Admin Ozzy Gist', passwordHash, role: 'ADMIN' },
+    create: {
+      email: adminEmail,
+      name: 'Admin Ozzy Gist',
+      passwordHash,
+      role: 'ADMIN',
+    },
   });
 
   await prisma.siteSettings.upsert({
@@ -34,7 +39,7 @@ const main = async () => {
           { label: 'Tienda', href: '/tienda' },
           { label: 'Contacto', href: '/#contacto' },
           { label: 'Mi bolsa', href: '/bolsa' },
-          { label: 'Mi cuenta', href: '/login' },
+          { label: 'Mi cuenta', href: '/cuenta' },
         ],
       },
     },
@@ -50,7 +55,7 @@ const main = async () => {
           { label: 'Tienda', href: '/tienda' },
           { label: 'Contacto', href: '/#contacto' },
           { label: 'Mi bolsa', href: '/bolsa' },
-          { label: 'Mi cuenta', href: '/login' },
+          { label: 'Mi cuenta', href: '/cuenta' },
         ],
       },
     },
@@ -162,7 +167,7 @@ const main = async () => {
         emptyCta: 'Explorar colección',
         emptyCtaHref: '/tienda',
         checkoutCta: 'Finalizar compra',
-        checkoutHref: '/#contacto',
+        checkoutHref: '/checkout',
       },
     },
     {
@@ -270,6 +275,7 @@ const main = async () => {
         name: product.name,
         description: product.description,
         price: product.price,
+        stock: 50,
         badge: product.badge,
         categoryId,
         imageUrl: product.imageUrl,
@@ -282,6 +288,7 @@ const main = async () => {
         slug: product.slug,
         description: product.description,
         price: product.price,
+        stock: 50,
         badge: product.badge,
         categoryId,
         imageUrl: product.imageUrl,

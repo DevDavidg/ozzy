@@ -55,19 +55,19 @@ export const StoreHeader = ({
       <header className="sticky top-0 z-30 border-b border-border/80 bg-background/90 backdrop-blur-lg">
         <nav
           aria-label="Navegación principal"
-          className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-5"
+          className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:gap-4 sm:px-6 sm:py-5"
         >
           {editable ? (
             <EditableText
               path="settings.brandName"
               value={settings.brandName}
               as="span"
-              className="brand-wordmark text-base md:text-lg"
+              className="brand-wordmark min-w-0 truncate text-base md:text-lg"
             />
           ) : (
             <Link
               href="/"
-              className="brand-wordmark text-base transition hover:opacity-60 md:text-lg"
+              className="brand-wordmark min-w-0 truncate text-base transition hover:opacity-60 md:text-lg"
             >
               {settings.brandName}
             </Link>
@@ -85,7 +85,7 @@ export const StoreHeader = ({
             ))}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <Link
               href="/bolsa"
               className="relative hidden size-9 items-center justify-center rounded-full text-muted-foreground transition hover:bg-muted hover:text-foreground sm:flex"
