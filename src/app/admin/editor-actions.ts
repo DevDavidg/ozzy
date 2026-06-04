@@ -1,23 +1,17 @@
 'use server';
 
-import { mkdir, writeFile } from 'node:fs/promises';
-import path from 'node:path';
-
 import { revalidatePath } from 'next/cache';
 
 import { requireAdmin } from '@/lib/auth';
 import { applyPathToSiteData } from '@/lib/editor-paths';
-import { prisma } from '@/lib/db';
 import {
+  getSiteData,
   saveCategory,
   saveGlobalSettings,
   saveProduct,
   saveSectionContent,
-  slugify,
 } from '@/lib/site-data';
 import type { SiteData } from '@/lib/types';
-
-const MAX_IMAGE_UPLOAD_BYTES = 10 * 1024 * 1024;
 
 const revalidateStore = () => {
   revalidatePath('/');
@@ -104,12 +98,12 @@ export type PatchResult = {
 export const patchEditorFieldAction = async (
   editorPath: string,
   value: string | number,
-  snapshot: SiteData,
 ): Promise<PatchResult> => {
   await requireAdmin();
 
   try {
-    const nextData = applyPathToSiteData(snapshot, editorPath, value);
+    const currentData = await getSiteData();
+    const nextData = applyPathToSiteData(currentData, editorPath, value);
     await persistSiteDataPatch(nextData, editorPath);
     revalidateStore();
     return { ok: true };
@@ -118,50 +112,3 @@ export const patchEditorFieldAction = async (
   }
 };
 
-export type UploadResult = {
-  ok: boolean;
-  url?: string;
-  message?: string;
-};
-
-export const uploadEditorImageAction = async (formData: FormData): Promise<UploadResult> => {
-  await requireAdmin();
-
-  const file = formData.get('file');
-
-  if (!(file instanceof File) || file.size === 0) {
-    return { ok: false, message: 'Archivo inválido.' };
-  }
-
-  if (!file.type.startsWith('image/')) {
-    return { ok: false, message: 'Solo se permiten imágenes.' };
-  }
-
-  if (file.size > MAX_IMAGE_UPLOAD_BYTES) {
-    return { ok: false, message: 'La imagen no puede superar 10 MB.' };
-  }
-
-  try {
-    const bytes = Buffer.from(await file.arrayBuffer());
-    const extension = path.extname(file.name) || '.jpg';
-    const safeName = `${Date.now()}-${slugify(path.basename(file.name, extension))}${extension}`;
-    const uploadDirectory = path.join(process.cwd(), 'public', 'uploads');
-    const filePath = path.join(uploadDirectory, safeName);
-    const publicUrl = `/uploads/${safeName}`;
-
-    await mkdir(uploadDirectory, { recursive: true });
-    await writeFile(filePath, bytes);
-    await prisma.mediaAsset.create({
-      data: {
-        fileName: file.name,
-        url: publicUrl,
-        mimeType: file.type,
-        size: file.size,
-      },
-    });
-
-    return { ok: true, url: publicUrl };
-  } catch {
-    return { ok: false, message: 'No se pudo subir la imagen. Revisá la base de datos y volvé a intentar.' };
-  }
-};

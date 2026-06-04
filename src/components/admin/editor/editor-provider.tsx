@@ -12,7 +12,8 @@ import {
 } from 'react';
 import { toast } from 'sonner';
 
-import { patchEditorFieldAction, uploadEditorImageAction } from '@/app/admin/editor-actions';
+import { patchEditorFieldAction } from '@/app/admin/editor-actions';
+import { uploadImageClient } from '@/lib/upload-image-client';
 import { applyPathToSiteData } from '@/lib/editor-paths';
 import type { SiteData } from '@/lib/types';
 
@@ -70,8 +71,7 @@ export const EditorProvider = ({ initialData, children }: EditorProviderProps) =
 
   const persistField = useCallback(async (path: string, value: string | number) => {
     setSaveStatus('saving');
-    const snapshot = applyPathToSiteData(dataRef.current, path, value);
-    const result = await patchEditorFieldAction(path, value, snapshot);
+    const result = await patchEditorFieldAction(path, value);
 
     setSaveStatus(result.ok ? 'saved' : 'error');
   }, []);
@@ -99,10 +99,7 @@ export const EditorProvider = ({ initialData, children }: EditorProviderProps) =
   const uploadImage = useCallback(
     async (path: string, file: File) => {
       setSaveStatus('saving');
-      const formData = new FormData();
-      formData.set('file', file);
-
-      const result = await uploadEditorImageAction(formData);
+      const result = await uploadImageClient(file);
 
       if (!result.ok || !result.url) {
         setSaveStatus('error');

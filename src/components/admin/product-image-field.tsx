@@ -6,7 +6,7 @@ import { useCallback, useId, useState, useTransition } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'sonner';
 
-import { uploadMediaAction } from '@/app/admin/actions';
+import { uploadImageClient } from '@/lib/upload-image-client';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
@@ -27,11 +27,8 @@ export const ProductImageField = ({
   const [isPending, startTransition] = useTransition();
 
   const handleUpload = useCallback((file: File) => {
-    const formData = new FormData();
-    formData.set('file', file);
-
     startTransition(async () => {
-      const result = await uploadMediaAction(formData);
+      const result = await uploadImageClient(file);
 
       if (result.ok && result.url) {
         setImageUrl(result.url);

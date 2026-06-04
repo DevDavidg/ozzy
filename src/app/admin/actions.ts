@@ -230,7 +230,38 @@ export type UploadMediaResult = {
   url?: string;
 };
 
-const MAX_IMAGE_UPLOAD_BYTES = 10 * 1024 * 1024;
+export type RegisterMediaInput = {
+  url: string;
+  fileName: string;
+  mimeType: string;
+  size: number;
+};
+
+const SERVER_ACTION_MAX_BYTES = 4 * 1024 * 1024;
+
+export const registerMediaAssetAction = async (
+  input: RegisterMediaInput,
+): Promise<UploadMediaResult> => {
+  await requireAdmin();
+
+  try {
+    await prisma.mediaAsset.create({
+      data: {
+        fileName: input.fileName,
+        url: input.url,
+        mimeType: input.mimeType,
+        size: input.size,
+      },
+    });
+
+    revalidatePath('/admin');
+    revalidatePath('/admin/manage');
+
+    return { ok: true, url: input.url };
+  } catch {
+    return { ok: false, message: 'No se pudo registrar la imagen en la base de datos.' };
+  }
+};
 
 export const uploadMediaAction = async (formData: FormData): Promise<UploadMediaResult> => {
   await requireAdmin();
@@ -244,8 +275,8 @@ export const uploadMediaAction = async (formData: FormData): Promise<UploadMedia
     return { ok: false, message: 'Solo se permiten archivos de imagen' };
   }
 
-  if (file.size > MAX_IMAGE_UPLOAD_BYTES) {
-    return { ok: false, message: 'La imagen no puede superar 10 MB' };
+  if (file.size > SERVER_ACTION_MAX_BYTES) {
+    return { ok: false, message: 'La imagen no puede superar 4 MB en este entorno.' };
   }
 
   try {

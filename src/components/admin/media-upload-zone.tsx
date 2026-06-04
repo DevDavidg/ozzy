@@ -5,7 +5,7 @@ import { useCallback, useTransition } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'sonner';
 
-import { uploadMediaAction } from '@/app/admin/actions';
+import { uploadImageClient } from '@/lib/upload-image-client';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -19,11 +19,8 @@ export const MediaUploadZone = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.set('file', file);
-
     startTransition(async () => {
-      const result = await uploadMediaAction(formData);
+      const result = await uploadImageClient(file);
 
       if (result.ok) {
         toast.success('Imagen subida correctamente');

@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { cn } from '@/lib/utils';
+import { isUnoptimizedImageUrl } from '@/lib/image-url';
 import { ImagePlus, Loader2, Upload } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -107,7 +107,7 @@ export const EditableImage = ({
       priority={priority}
       sizes={sizes}
       className={className}
-      unoptimized={src.startsWith('/uploads/')}
+      unoptimized={isUnoptimizedImageUrl(src)}
     />
   );
 
