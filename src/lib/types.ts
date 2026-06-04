@@ -15,7 +15,9 @@ export type HeroContent = {
   title: string;
   description: string;
   primaryCta: string;
+  primaryCtaHref: string;
   secondaryCta: string;
+  secondaryCtaHref: string;
   meta: string;
   counter: string;
   imageUrl: string;
@@ -29,6 +31,7 @@ export type HeaderContent = {
   eyebrow?: string;
   heading: string;
   cta: string;
+  ctaHref: string;
 };
 
 export type CampaignContent = HeaderContent & {
@@ -49,12 +52,31 @@ export type CommunityContent = {
   heading: string;
   description: string;
   cta: string;
+  ctaHref: string;
+};
+
+export type BagContent = {
+  emptyTitle: string;
+  emptyDescription: string;
+  emptyCta: string;
+  emptyCtaHref: string;
+  checkoutCta: string;
+  checkoutHref: string;
 };
 
 export type FooterContent = {
   description: string;
-  shopLinks: string[];
-  supportLinks: string[];
+  shopLinks: NavigationLink[];
+  supportLinks: NavigationLink[];
+};
+
+export type CartItem = {
+  productId: string;
+  slug: string;
+  name: string;
+  price: number;
+  imageUrl: string;
+  quantity: number;
 };
 
 export type SectionContent =
@@ -64,6 +86,7 @@ export type SectionContent =
   | CampaignContent
   | BenefitsContent
   | CommunityContent
+  | BagContent
   | FooterContent;
 
 export type EditableSection = {

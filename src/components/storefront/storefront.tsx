@@ -1,38 +1,33 @@
-"use client";
+'use client';
 
-import {
-  ArrowRight,
-  AtSign,
-  Package,
-  RefreshCw,
-  ShieldCheck,
-  ShoppingBag,
-  Truck,
-} from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+import { ArrowRight } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
-import { EditableImage } from "@/components/admin/editor/editable-image";
-import { EditableText } from "@/components/admin/editor/editable-text";
-import { MobileNav } from "@/components/storefront/mobile-nav";
-import { ParallaxLayer } from "@/components/storefront/parallax-layer";
-import { Reveal } from "@/components/storefront/reveal";
-import { formatPrice } from "@/lib/site-data";
-import { cn } from "@/lib/utils";
+import { EditableImage } from '@/components/admin/editor/editable-image';
+import { EditableText } from '@/components/admin/editor/editable-text';
+import { CartView } from '@/components/storefront/cart-view';
+import { CtaLink } from '@/components/storefront/cta-link';
+import { ParallaxLayer } from '@/components/storefront/parallax-layer';
+import { ProductCard } from '@/components/storefront/product-card';
+import { Reveal } from '@/components/storefront/reveal';
+import { StoreShell } from '@/components/storefront/store-shell';
 import type {
+  BagContent,
   BenefitsContent,
   CampaignContent,
   CommunityContent,
-  FooterContent,
   HeaderContent,
   HeroContent,
   SiteData,
   TickerContent,
-} from "@/lib/types";
+} from '@/lib/types';
+import { RefreshCw, ShieldCheck, Truck } from 'lucide-react';
 
 type StorefrontProps = {
   data: SiteData;
   editable?: boolean;
+  showFallbackBanner?: boolean;
 };
 
 const BENEFIT_ICONS = [Truck, RefreshCw, ShieldCheck] as const;
@@ -40,107 +35,28 @@ const BENEFIT_ICONS = [Truck, RefreshCw, ShieldCheck] as const;
 const getContent = <T,>(data: SiteData, key: string) =>
   data.sections[key]?.content as T;
 
-export const Storefront = ({ data, editable = false }: StorefrontProps) => {
-  const hero = getContent<HeroContent>(data, "hero");
-  const ticker = getContent<TickerContent>(data, "ticker");
-  const categoriesHeader = getContent<HeaderContent>(data, "categories");
-  const featuredHeader = getContent<HeaderContent>(data, "featured");
-  const campaign = getContent<CampaignContent>(data, "campaign");
-  const benefits = getContent<BenefitsContent>(data, "benefits");
-  const community = getContent<CommunityContent>(data, "community");
-  const footer = getContent<FooterContent>(data, "footer");
+export const Storefront = ({
+  data,
+  editable = false,
+  showFallbackBanner = false,
+}: StorefrontProps) => {
+  const hero = getContent<HeroContent>(data, 'hero');
+  const ticker = getContent<TickerContent>(data, 'ticker');
+  const categoriesHeader = getContent<HeaderContent>(data, 'categories');
+  const featuredHeader = getContent<HeaderContent>(data, 'featured');
+  const campaign = getContent<CampaignContent>(data, 'campaign');
+  const benefits = getContent<BenefitsContent>(data, 'benefits');
+  const community = getContent<CommunityContent>(data, 'community');
+  const bag = getContent<BagContent>(data, 'bag');
+
   const visibleProducts = data.products.filter((product) => product.isVisible);
-  const featuredProducts = visibleProducts.filter(
-    (product) => product.isFeatured,
-  );
-  const visibleCategories = data.categories.filter(
-    (category) => category.isVisible,
-  );
+  const featuredProducts = visibleProducts.filter((product) => product.isFeatured);
+  const visibleCategories = data.categories.filter((category) => category.isVisible);
 
   const Text = editable ? EditableText : StaticText;
-  const loginHref = editable ? "/admin" : "/login";
-  const loginLabel = editable ? "Editando" : "Iniciar sesión";
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <section
-        className="overflow-hidden border-b border-border bg-foreground py-2 text-label text-primary-foreground/90"
-        aria-label="Anuncios"
-      >
-        <div className="marquee-track flex min-w-max gap-8 whitespace-nowrap">
-          <Text
-            path="settings.announcement"
-            value={data.settings.announcement}
-          />
-          <Text
-            path="settings.announcement"
-            value={data.settings.announcement}
-          />
-        </div>
-      </section>
-
-      <header className="sticky top-0 z-30 border-b border-border/80 bg-background/90 backdrop-blur-lg">
-        <nav
-          aria-label="Navegación principal"
-          className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-5"
-        >
-          {editable ? (
-            <EditableText
-              path="settings.brandName"
-              value={data.settings.brandName}
-              as="span"
-              className="brand-wordmark text-base md:text-lg"
-            />
-          ) : (
-            <Link
-              href="#inicio"
-              className="brand-wordmark text-base transition hover:opacity-60 md:text-lg"
-            >
-              {data.settings.brandName}
-            </Link>
-          )}
-
-          <div className="hidden items-center gap-10 text-sm font-normal text-muted-foreground md:flex">
-            {data.settings.navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="transition hover:text-foreground"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Link
-              href="#bolsa"
-              className="hidden size-9 items-center justify-center rounded-full text-muted-foreground transition hover:bg-muted hover:text-foreground sm:flex"
-              aria-label="Ver bolsa"
-            >
-              <ShoppingBag className="size-4" aria-hidden />
-            </Link>
-            <Link
-              href={loginHref}
-              className={cn(
-                "hidden rounded-full px-5 py-2 text-sm font-medium transition md:inline-flex",
-                editable
-                  ? "bg-foreground text-primary-foreground"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
-              )}
-            >
-              {loginLabel}
-            </Link>
-            <MobileNav
-              brandName={data.settings.brandName}
-              navLinks={data.settings.navLinks}
-              loginHref={loginHref}
-              loginLabel={loginLabel}
-            />
-          </div>
-        </nav>
-      </header>
-
+    <StoreShell data={data} editable={editable} showFallbackBanner={showFallbackBanner}>
       <section
         id="inicio"
         className="relative overflow-hidden bg-hero text-hero-foreground"
@@ -177,42 +93,28 @@ export const Storefront = ({ data, editable = false }: StorefrontProps) => {
                 className="mt-6 max-w-lg text-base font-light leading-7 text-white/60 md:text-lg md:leading-8"
               />
               <div className="mt-10 flex flex-wrap gap-3">
-                {editable ? (
-                  <>
-                    <span className="inline-flex items-center gap-2 rounded-full bg-hero-foreground px-6 py-3.5 text-sm font-medium text-hero">
-                      <Text
-                        path="sections.hero.primaryCta"
-                        value={hero.primaryCta}
-                      />
-                      <ArrowRight className="size-4" aria-hidden />
-                    </span>
-                    <span className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3.5 text-sm font-medium text-hero-foreground">
-                      <Text
-                        path="sections.hero.secondaryCta"
-                        value={hero.secondaryCta}
-                      />
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <Link
-                      href="#tienda"
-                      className="group inline-flex items-center gap-2 rounded-full bg-hero-foreground px-6 py-3.5 text-sm font-medium text-hero transition hover:bg-white"
-                    >
-                      {hero.primaryCta}
-                      <ArrowRight
-                        className="size-4 transition group-hover:translate-x-0.5"
-                        aria-hidden
-                      />
-                    </Link>
-                    <Link
-                      href="#productos"
-                      className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3.5 text-sm font-medium text-hero-foreground transition hover:border-white/40 hover:bg-white/5"
-                    >
-                      {hero.secondaryCta}
-                    </Link>
-                  </>
-                )}
+                <CtaLink
+                  href={hero.primaryCtaHref}
+                  label={hero.primaryCta}
+                  labelPath="sections.hero.primaryCta"
+                  hrefPath="sections.hero.primaryCtaHref"
+                  editable={editable}
+                  showArrow
+                  variant={editable ? 'primary' : 'primary'}
+                  className={
+                    editable
+                      ? undefined
+                      : 'group bg-hero-foreground text-hero hover:bg-white'
+                  }
+                />
+                <CtaLink
+                  href={hero.secondaryCtaHref}
+                  label={hero.secondaryCta}
+                  labelPath="sections.hero.secondaryCta"
+                  hrefPath="sections.hero.secondaryCtaHref"
+                  editable={editable}
+                  variant="secondary"
+                />
               </div>
             </div>
             <div className="flex items-center justify-between border-t border-white/10 pt-6 text-label text-white/40">
@@ -234,7 +136,14 @@ export const Storefront = ({ data, editable = false }: StorefrontProps) => {
                   containerClassName="absolute inset-0"
                 />
               ) : (
-                <HeroImage src={hero.imageUrl} alt={hero.title} />
+                <Image
+                  src={hero.imageUrl}
+                  alt={hero.title}
+                  fill
+                  priority
+                  className="object-cover"
+                  unoptimized={hero.imageUrl.startsWith('/uploads/')}
+                />
               )}
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
               <span className="pointer-events-none absolute bottom-5 left-5 text-label text-white/70">
@@ -264,31 +173,46 @@ export const Storefront = ({ data, editable = false }: StorefrontProps) => {
               as="h2"
               className="font-display text-3xl font-semibold md:text-4xl"
             />
-            <Text
-              path="sections.categories.cta"
-              value={categoriesHeader.cta}
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground underline-offset-4 transition hover:text-foreground hover:underline"
+            <CtaLink
+              href={categoriesHeader.ctaHref}
+              label={categoriesHeader.cta}
+              labelPath="sections.categories.cta"
+              hrefPath="sections.categories.ctaHref"
+              editable={editable}
+              variant="text"
             />
           </div>
         </Reveal>
         <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-4">
           {visibleCategories.map((category, index) => (
             <Reveal key={category.id} delay={index * 80}>
-              <div className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 transition duration-300 hover:border-foreground/15 hover:shadow-sm">
-                <span className="font-display text-3xl font-light leading-none text-muted-foreground/40 transition group-hover:text-muted-foreground/60">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <Text
-                  path={`categories.${category.id}.name`}
-                  value={category.name}
-                  as="span"
-                  className="mt-4 block text-lg font-medium"
-                />
-                <ArrowRight
-                  className="absolute bottom-6 right-6 size-5 translate-x-2 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100"
-                  aria-hidden
-                />
-              </div>
+              {editable ? (
+                <div className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6">
+                  <span className="font-display text-3xl font-light leading-none text-muted-foreground/40">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <EditableText
+                    path={`categories.${category.id}.name`}
+                    value={category.name}
+                    as="span"
+                    className="mt-4 block text-lg font-medium"
+                  />
+                </div>
+              ) : (
+                <Link
+                  href={`/categoria/${category.slug}`}
+                  className="group relative block overflow-hidden rounded-2xl border border-border bg-card p-6 transition duration-300 hover:border-foreground/15 hover:shadow-sm"
+                >
+                  <span className="font-display text-3xl font-light leading-none text-muted-foreground/40 transition group-hover:text-muted-foreground/60">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <span className="mt-4 block text-lg font-medium">{category.name}</span>
+                  <ArrowRight
+                    className="absolute bottom-6 right-6 size-5 translate-x-2 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100"
+                    aria-hidden
+                  />
+                </Link>
+              )}
             </Reveal>
           ))}
         </div>
@@ -300,7 +224,7 @@ export const Storefront = ({ data, editable = false }: StorefrontProps) => {
             <div>
               <Text
                 path="sections.featured.eyebrow"
-                value={featuredHeader.eyebrow ?? ""}
+                value={featuredHeader.eyebrow ?? ''}
                 as="p"
                 className="text-label text-muted-foreground"
               />
@@ -311,86 +235,21 @@ export const Storefront = ({ data, editable = false }: StorefrontProps) => {
                 className="font-display mt-2 text-3xl font-semibold md:text-4xl"
               />
             </div>
-            <Text
-              path="sections.featured.cta"
-              value={featuredHeader.cta}
-              className="text-sm font-medium text-muted-foreground underline-offset-4 transition hover:text-foreground hover:underline"
+            <CtaLink
+              href={featuredHeader.ctaHref}
+              label={featuredHeader.cta}
+              labelPath="sections.featured.cta"
+              hrefPath="sections.featured.ctaHref"
+              editable={editable}
+              variant="text"
             />
           </div>
         </Reveal>
         <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-4">
           {featuredProducts.map((product, index) => (
             <Reveal key={product.id} delay={(index % 4) * 80}>
-              <ParallaxLayer
-                speed={0.06 + (index % 2) * 0.04}
-                mobileOnly
-              >
-                <article className="group">
-                  <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-muted">
-                    {editable ? (
-                      <EditableImage
-                        path={`products.${product.id}.imageUrl`}
-                        src={product.imageUrl}
-                        alt={product.name}
-                        fill
-                        sizes="(min-width: 768px) 25vw, 100vw"
-                        className="object-cover transition duration-500 group-hover:scale-105"
-                        containerClassName="absolute inset-0"
-                      />
-                    ) : (
-                      <ProductImage product={product} />
-                    )}
-                    {!editable ? (
-                      <div className="pointer-events-none absolute inset-0 flex items-end justify-center bg-gradient-to-t from-foreground/60 via-transparent to-transparent p-6 opacity-0 transition duration-300 group-hover:opacity-100">
-                        <span className="rounded-full bg-primary-foreground px-4 py-2 text-label text-foreground">
-                          Ver detalle
-                        </span>
-                      </div>
-                    ) : null}
-                    {product.badge ? (
-                      <span className="pointer-events-none absolute left-4 top-4 rounded-full bg-foreground px-3 py-1 text-label text-primary-foreground">
-                        {editable ? (
-                          <EditableText
-                            path={`products.${product.id}.badge`}
-                            value={product.badge}
-                          />
-                        ) : (
-                          product.badge
-                        )}
-                      </span>
-                    ) : null}
-                  </div>
-                  <div className="mt-4">
-                    <p className="text-label text-muted-foreground">
-                      {product.categoryName}
-                    </p>
-                    <Text
-                      path={`products.${product.id}.name`}
-                      value={product.name}
-                      as="h3"
-                      className="mt-1 text-base font-medium"
-                    />
-                    <Text
-                      path={`products.${product.id}.description`}
-                      value={product.description}
-                      as="p"
-                      multiline
-                      className="mt-2 line-clamp-2 text-sm leading-6 text-muted-foreground"
-                    />
-                    {editable ? (
-                      <EditableText
-                        path={`products.${product.id}.price`}
-                        value={String(product.price)}
-                        as="p"
-                        className="mt-3 text-base font-semibold"
-                      />
-                    ) : (
-                      <p className="mt-3 text-base font-semibold">
-                        {formatPrice(product.price)}
-                      </p>
-                    )}
-                  </div>
-                </article>
+              <ParallaxLayer speed={0.06 + (index % 2) * 0.04} mobileOnly>
+                <ProductCard product={product} editable={editable} index={index} />
               </ParallaxLayer>
             </Reveal>
           ))}
@@ -403,7 +262,7 @@ export const Storefront = ({ data, editable = false }: StorefrontProps) => {
             <div>
               <Text
                 path="sections.campaign.eyebrow"
-                value={campaign.eyebrow ?? ""}
+                value={campaign.eyebrow ?? ''}
                 as="p"
                 className="text-label text-secondary"
               />
@@ -414,10 +273,15 @@ export const Storefront = ({ data, editable = false }: StorefrontProps) => {
                 className="font-display mt-6 text-3xl font-semibold leading-tight md:text-4xl"
               />
             </div>
-            <span className="mt-10 inline-flex w-fit items-center gap-2 rounded-full bg-primary-foreground px-6 py-3.5 text-sm font-medium text-foreground transition hover:opacity-90">
-              <Text path="sections.campaign.cta" value={campaign.cta} />
-              <ArrowRight className="size-4" aria-hidden />
-            </span>
+            <CtaLink
+              href={campaign.ctaHref}
+              label={campaign.cta}
+              labelPath="sections.campaign.cta"
+              hrefPath="sections.campaign.ctaHref"
+              editable={editable}
+              showArrow
+              className="mt-10 w-fit bg-primary-foreground text-foreground hover:opacity-90"
+            />
           </div>
         </Reveal>
         <Reveal delay={120}>
@@ -433,7 +297,13 @@ export const Storefront = ({ data, editable = false }: StorefrontProps) => {
                   containerClassName="absolute inset-0"
                 />
               ) : (
-                <CampaignImage src={campaign.imageUrl} alt={campaign.heading} />
+                <Image
+                  src={campaign.imageUrl}
+                  alt={campaign.heading}
+                  fill
+                  className="object-cover"
+                  unoptimized={campaign.imageUrl.startsWith('/uploads/')}
+                />
               )}
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-foreground/20 to-transparent" />
             </div>
@@ -494,10 +364,15 @@ export const Storefront = ({ data, editable = false }: StorefrontProps) => {
                     multiline
                     className="text-lg leading-8 text-muted-foreground"
                   />
-                  <span className="mt-8 inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3.5 text-sm font-medium text-primary-foreground transition hover:opacity-90">
-                    <Text path="sections.community.cta" value={community.cta} />
-                    <ArrowRight className="size-4" aria-hidden />
-                  </span>
+                  <CtaLink
+                    href={community.ctaHref}
+                    label={community.cta}
+                    labelPath="sections.community.cta"
+                    hrefPath="sections.community.ctaHref"
+                    editable={editable}
+                    showArrow
+                    className="mt-8"
+                  />
                 </div>
               </div>
             </div>
@@ -507,94 +382,18 @@ export const Storefront = ({ data, editable = false }: StorefrontProps) => {
 
       <aside id="bolsa" className="mx-auto mb-24 max-w-7xl px-5">
         <Reveal>
-          <div className="rounded-2xl border border-dashed border-border bg-card/30 p-10 text-center">
-            <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-muted">
-              <ShoppingBag className="size-5 text-muted-foreground" aria-hidden />
-            </div>
-            <Text
-              path="settings.instagram"
-              value={data.settings.instagram}
-              as="p"
-              className="mt-5 text-label text-muted-foreground"
-            />
-            <h2 className="font-display mt-3 text-xl font-semibold">Tu bolsa</h2>
-            <p className="mx-auto mt-2 max-w-sm text-muted-foreground">
-              Tu bolsa está vacía. Empezá a explorar la colección.
-            </p>
-            {!editable ? (
-              <Link
-                href="#productos"
-                className="mt-6 inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-primary-foreground transition hover:opacity-90"
-              >
-                Explorar colección
-                <ArrowRight className="size-4" aria-hidden />
-              </Link>
-            ) : null}
-          </div>
+          <CartView bag={bag} editable={editable} />
         </Reveal>
       </aside>
-
-      <footer className="border-t border-border bg-foreground px-6 py-16 text-primary-foreground">
-        <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1.2fr_0.8fr_0.8fr]">
-          <div>
-            <Text
-              path="settings.brandName"
-              value={data.settings.brandName}
-              as="h2"
-              className="brand-wordmark text-2xl"
-            />
-            <Text
-              path="sections.footer.description"
-              value={footer.description}
-              as="p"
-              multiline
-              className="mt-4 max-w-sm leading-7 text-secondary"
-            />
-            <a
-              href={`https://instagram.com/${data.settings.instagram.replace("@", "")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-secondary transition hover:text-primary-foreground"
-              aria-label={`Instagram ${data.settings.instagram}`}
-            >
-              <AtSign className="size-4" aria-hidden />
-              {data.settings.instagram}
-            </a>
-          </div>
-          <FooterList
-            title="Tienda"
-            items={footer.shopLinks}
-            prefix="sections.footer.shopLinks"
-            editable={editable}
-          />
-          <FooterList
-            title="Soporte"
-            items={footer.supportLinks}
-            prefix="sections.footer.supportLinks"
-            editable={editable}
-          />
-        </div>
-        <div className="mx-auto mt-10 flex max-w-7xl flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-secondary">
-          <span className="inline-flex items-center gap-2">
-            <Package className="size-4 shrink-0" aria-hidden />
-            © 2026 {data.settings.brandName}. Todos los derechos reservados.
-          </span>
-          <Text
-            path="settings.instagram"
-            value={data.settings.instagram}
-            as="span"
-          />
-        </div>
-      </footer>
-    </main>
+    </StoreShell>
   );
 };
 
-type TextTag = "span" | "p" | "h1" | "h2" | "h3";
+type TextTag = 'span' | 'p' | 'h1' | 'h2' | 'h3';
 
 const StaticText = ({
   value,
-  as: Tag = "span",
+  as: Tag = 'span',
   className,
 }: {
   path?: string;
@@ -603,68 +402,3 @@ const StaticText = ({
   className?: string;
   multiline?: boolean;
 }) => <Tag className={className}>{value}</Tag>;
-
-const HeroImage = ({ src, alt }: { src: string; alt: string }) => (
-  <Image
-    src={src}
-    alt={alt}
-    fill
-    priority
-    className="object-cover"
-    unoptimized={src.startsWith("/uploads/")}
-  />
-);
-
-const CampaignImage = ({ src, alt }: { src: string; alt: string }) => (
-  <Image
-    src={src}
-    alt={alt}
-    fill
-    className="object-cover"
-    unoptimized={src.startsWith("/uploads/")}
-  />
-);
-
-const ProductImage = ({
-  product,
-}: {
-  product: { imageUrl: string; name: string };
-}) => (
-  <Image
-    src={product.imageUrl}
-    alt={product.name}
-    fill
-    sizes="(min-width: 768px) 25vw, 100vw"
-    className="object-cover transition duration-500 group-hover:scale-105"
-    unoptimized={product.imageUrl.startsWith("/uploads/")}
-  />
-);
-
-const FooterList = ({
-  title,
-  items,
-  prefix,
-  editable,
-}: {
-  title: string;
-  items: string[];
-  prefix: string;
-  editable: boolean;
-}) => (
-  <div>
-    <h3 className="text-label text-secondary">{title}</h3>
-    <ul className="mt-4 space-y-3 text-secondary">
-      {items.map((item, index) => (
-        <li key={`${item}-${index}`}>
-          {editable ? (
-            <EditableText path={`${prefix}.${index}`} value={item} as="span" />
-          ) : (
-            <span className="cursor-default transition hover:text-primary-foreground">
-              {item}
-            </span>
-          )}
-        </li>
-      ))}
-    </ul>
-  </div>
-);

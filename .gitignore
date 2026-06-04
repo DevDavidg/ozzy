@@ -9,34 +9,51 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
+.pnpm-store
 
 # testing
 /coverage
+.nyc_output
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
 
 # next.js
 /.next/
 /out/
+.swc/
 
 # production
 /build
+/dist
 
 # misc
-.DS_Store
 *.pem
+*.local
 
-# debug
+# debug & logs
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+.eslintcache
 
 # env files (can opt-in for committing if needed)
 .env*
 !.env.example
 
-# local prisma/sqlite dev database
-prisma/dev.db
+# prisma / sqlite (local dev database)
 prisma/*.db
+prisma/*.db-journal
+prisma/*.db-wal
+prisma/*.db-shm
+
+# user-uploaded media (keep folder via .gitkeep)
+/public/uploads/*
+!/public/uploads/.gitkeep
 
 # vercel
 .vercel
@@ -44,3 +61,27 @@ prisma/*.db
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# editors & IDEs
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.code-workspace
+*.sublime-project
+*.sublime-workspace
+
+# turbo (if added later)
+.turbo

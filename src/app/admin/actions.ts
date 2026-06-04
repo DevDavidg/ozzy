@@ -16,6 +16,7 @@ import {
   slugify,
 } from '@/lib/site-data';
 import type {
+  BagContent,
   BenefitsContent,
   CampaignContent,
   CommunityContent,
@@ -29,6 +30,8 @@ import type {
 const revalidateStore = () => {
   revalidatePath('/');
   revalidatePath('/admin');
+  revalidatePath('/tienda');
+  revalidatePath('/bolsa');
 };
 
 const splitLines = (value: FormDataEntryValue | null) =>
@@ -63,7 +66,9 @@ export const updateHeroAction = async (formData: FormData) => {
     title: formData.get('title')?.toString() ?? '',
     description: formData.get('description')?.toString() ?? '',
     primaryCta: formData.get('primaryCta')?.toString() ?? '',
+    primaryCtaHref: formData.get('primaryCtaHref')?.toString() ?? '/tienda',
     secondaryCta: formData.get('secondaryCta')?.toString() ?? '',
+    secondaryCtaHref: formData.get('secondaryCtaHref')?.toString() ?? '/categoria/hoodies',
     meta: formData.get('meta')?.toString() ?? '',
     counter: formData.get('counter')?.toString() ?? '',
     imageUrl: formData.get('imageUrl')?.toString() ?? '',
@@ -91,6 +96,7 @@ export const updateHeaderSectionAction = async (key: 'categories' | 'featured', 
     eyebrow: formData.get('eyebrow')?.toString() || undefined,
     heading: formData.get('heading')?.toString() ?? '',
     cta: formData.get('cta')?.toString() ?? '',
+    ctaHref: formData.get('ctaHref')?.toString() ?? '/tienda',
   };
 
   await saveSectionContent(key, content);
@@ -104,6 +110,7 @@ export const updateCampaignAction = async (formData: FormData) => {
     eyebrow: formData.get('eyebrow')?.toString() ?? '',
     heading: formData.get('heading')?.toString() ?? '',
     cta: formData.get('cta')?.toString() ?? '',
+    ctaHref: formData.get('ctaHref')?.toString() ?? '/tienda',
     imageUrl: formData.get('imageUrl')?.toString() ?? '',
   };
 
@@ -133,19 +140,42 @@ export const updateCommunityAction = async (formData: FormData) => {
     heading: formData.get('heading')?.toString() ?? '',
     description: formData.get('description')?.toString() ?? '',
     cta: formData.get('cta')?.toString() ?? '',
+    ctaHref: formData.get('ctaHref')?.toString() ?? 'https://instagram.com/ozzygist',
   };
 
   await saveSectionContent('community', content);
   revalidateStore();
 };
 
+export const updateBagAction = async (formData: FormData) => {
+  await requireAdmin();
+
+  const content: BagContent = {
+    emptyTitle: formData.get('emptyTitle')?.toString() ?? '',
+    emptyDescription: formData.get('emptyDescription')?.toString() ?? '',
+    emptyCta: formData.get('emptyCta')?.toString() ?? '',
+    emptyCtaHref: formData.get('emptyCtaHref')?.toString() ?? '/tienda',
+    checkoutCta: formData.get('checkoutCta')?.toString() ?? '',
+    checkoutHref: formData.get('checkoutHref')?.toString() ?? '/#contacto',
+  };
+
+  await saveSectionContent('bag', content);
+  revalidateStore();
+};
+
+const parseFooterLinks = (value: FormDataEntryValue | null) =>
+  splitLines(value).map((line) => {
+    const [label = '', href = '#'] = line.split('|').map((item) => item.trim());
+    return { label, href };
+  });
+
 export const updateFooterAction = async (formData: FormData) => {
   await requireAdmin();
 
   const content: FooterContent = {
     description: formData.get('description')?.toString() ?? '',
-    shopLinks: splitLines(formData.get('shopLinks')),
-    supportLinks: splitLines(formData.get('supportLinks')),
+    shopLinks: parseFooterLinks(formData.get('shopLinks')),
+    supportLinks: parseFooterLinks(formData.get('supportLinks')),
   };
 
   await saveSectionContent('footer', content);

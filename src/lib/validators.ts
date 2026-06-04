@@ -17,7 +17,9 @@ export const heroContentSchema = z.object({
   title: z.string().min(1),
   description: z.string().min(1),
   primaryCta: z.string().min(1),
+  primaryCtaHref: z.string().min(1).default('/tienda'),
   secondaryCta: z.string().min(1),
+  secondaryCtaHref: z.string().min(1).default('/categoria/hoodies'),
   meta: z.string().min(1),
   counter: z.string().min(1),
   imageUrl: z.string().min(1),
@@ -31,6 +33,7 @@ export const headerContentSchema = z.object({
   eyebrow: z.string().optional(),
   heading: z.string().min(1),
   cta: z.string().min(1),
+  ctaHref: z.string().min(1).default('/tienda'),
 });
 
 export const campaignContentSchema = headerContentSchema.extend({
@@ -53,12 +56,27 @@ export const communityContentSchema = z.object({
   heading: z.string().min(1),
   description: z.string().min(1),
   cta: z.string().min(1),
+  ctaHref: z.string().min(1).default('https://instagram.com/ozzygist'),
+});
+
+export const bagContentSchema = z.object({
+  emptyTitle: z.string().min(1),
+  emptyDescription: z.string().min(1),
+  emptyCta: z.string().min(1),
+  emptyCtaHref: z.string().min(1).default('/tienda'),
+  checkoutCta: z.string().min(1),
+  checkoutHref: z.string().min(1).default('/#contacto'),
+});
+
+const navigationLinkSchema = z.object({
+  label: z.string().min(1),
+  href: z.string().min(1),
 });
 
 export const footerContentSchema = z.object({
   description: z.string().min(1),
-  shopLinks: z.array(z.string().min(1)).min(1),
-  supportLinks: z.array(z.string().min(1)).min(1),
+  shopLinks: z.array(z.union([z.string().min(1), navigationLinkSchema])).min(1),
+  supportLinks: z.array(z.union([z.string().min(1), navigationLinkSchema])).min(1),
 });
 
 export const productSchema = z.object({
@@ -96,5 +114,6 @@ export const sectionSchemaByKey = {
   campaign: campaignContentSchema,
   benefits: benefitsContentSchema,
   community: communityContentSchema,
+  bag: bagContentSchema,
   footer: footerContentSchema,
 };

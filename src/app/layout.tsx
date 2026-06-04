@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 
+import { CartProvider } from "@/context/cart-context";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
@@ -27,8 +28,10 @@ export default function RootLayout({
     <html lang="es" className={`${poppins.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-sans">
         <TooltipProvider delayDuration={300}>
-          {children}
-          <Toaster richColors closeButton position="top-right" />
+          <CartProvider>
+            {children}
+            <Toaster richColors closeButton position="top-right" />
+          </CartProvider>
         </TooltipProvider>
       </body>
     </html>

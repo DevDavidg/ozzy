@@ -30,9 +30,10 @@ const main = async () => {
         announcement:
           'Envío gratis desde $120.000 · Cambios sin cargo · Nueva colección — Otoño 26 · Pagá hasta en 6 cuotas',
         navLinks: [
-          { label: 'Inicio', href: '#inicio' },
-          { label: 'Tienda', href: '#tienda' },
-          { label: 'Contacto', href: '#contacto' },
+          { label: 'Inicio', href: '/#inicio' },
+          { label: 'Tienda', href: '/tienda' },
+          { label: 'Contacto', href: '/#contacto' },
+          { label: 'Mi bolsa', href: '/bolsa' },
           { label: 'Mi cuenta', href: '/login' },
         ],
       },
@@ -45,9 +46,10 @@ const main = async () => {
         announcement:
           'Envío gratis desde $120.000 · Cambios sin cargo · Nueva colección — Otoño 26 · Pagá hasta en 6 cuotas',
         navLinks: [
-          { label: 'Inicio', href: '#inicio' },
-          { label: 'Tienda', href: '#tienda' },
-          { label: 'Contacto', href: '#contacto' },
+          { label: 'Inicio', href: '/#inicio' },
+          { label: 'Tienda', href: '/tienda' },
+          { label: 'Contacto', href: '/#contacto' },
+          { label: 'Mi bolsa', href: '/bolsa' },
           { label: 'Mi cuenta', href: '/login' },
         ],
       },
@@ -65,7 +67,9 @@ const main = async () => {
         description:
           'Una colección reducida de piezas pesadas, cortes caídos y paletas cálidas. Fabricado en cantidades limitadas.',
         primaryCta: 'Comprar ahora',
+        primaryCtaHref: '/tienda',
         secondaryCta: 'Ver hoodies',
+        secondaryCtaHref: '/categoria/hoodies',
         meta: 'Argentina · Envíos a todo el país',
         counter: '006 / 24',
         imageUrl:
@@ -87,6 +91,7 @@ const main = async () => {
       content: {
         heading: 'Categorías',
         cta: 'Ver todo',
+        ctaHref: '/tienda',
       },
     },
     {
@@ -97,6 +102,7 @@ const main = async () => {
         eyebrow: 'Destacados',
         heading: 'Lo más buscado',
         cta: 'Ver todos',
+        ctaHref: '/tienda',
       },
     },
     {
@@ -107,6 +113,7 @@ const main = async () => {
         eyebrow: 'Campaña 006',
         heading: 'Para los que se mueven sin apuro.',
         cta: 'Ver colección',
+        ctaHref: '/tienda',
         imageUrl:
           'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=1400&q=80',
       },
@@ -142,17 +149,41 @@ const main = async () => {
         description:
           'Piezas esenciales para el día a día. Construidas con materiales premium en cantidades limitadas.',
         cta: 'Suscribirse',
+        ctaHref: 'https://instagram.com/ozzygist',
+      },
+    },
+    {
+      key: 'bag',
+      title: 'Bolsa',
+      sortOrder: 8,
+      content: {
+        emptyTitle: 'Tu bolsa',
+        emptyDescription: 'Tu bolsa está vacía. Empezá a explorar la colección.',
+        emptyCta: 'Explorar colección',
+        emptyCtaHref: '/tienda',
+        checkoutCta: 'Finalizar compra',
+        checkoutHref: '/#contacto',
       },
     },
     {
       key: 'footer',
       title: 'Footer',
-      sortOrder: 8,
+      sortOrder: 9,
       content: {
         description:
           'Piezas esenciales para el día a día. Construidas con materiales premium en cantidades limitadas.',
-        shopLinks: ['Todos', 'Hoodies', 'Pantalones', 'Accesorios'],
-        supportLinks: ['Contacto', 'Envíos', 'Cambios y devoluciones', 'Guía de talles'],
+        shopLinks: [
+          { label: 'Todos', href: '/tienda' },
+          { label: 'Hoodies', href: '/categoria/hoodies' },
+          { label: 'Pantalones', href: '/categoria/pantalones' },
+          { label: 'Remeras', href: '/categoria/remeras' },
+        ],
+        supportLinks: [
+          { label: 'Contacto', href: '/#contacto' },
+          { label: 'Envíos', href: '/tienda' },
+          { label: 'Cambios y devoluciones', href: '/tienda' },
+          { label: 'Guía de talles', href: '/tienda' },
+        ],
       },
     },
   ];

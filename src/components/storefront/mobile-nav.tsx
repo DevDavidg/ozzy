@@ -16,6 +16,7 @@ type MobileNavProps = {
   navLinks: NavLink[];
   loginHref: string;
   loginLabel: string;
+  cartCount?: number;
 };
 
 export const MobileNav = ({
@@ -23,6 +24,7 @@ export const MobileNav = ({
   navLinks,
   loginHref,
   loginLabel,
+  cartCount = 0,
 }: MobileNavProps) => {
   const [open, setOpen] = useState(false);
 
@@ -89,17 +91,26 @@ export const MobileNav = ({
             </button>
           </div>
           <ul className="flex flex-1 flex-col gap-1 px-4 py-6">
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className="block rounded-xl px-4 py-3 text-base font-medium transition hover:bg-muted"
-                  onClick={handleClose}
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
+            {navLinks.map((link) => {
+              const isBagLink = link.href === '/bolsa' || link.href === '#bolsa';
+
+              return (
+                <li key={`${link.label}-${link.href}`}>
+                  <Link
+                    href={link.href}
+                    className="flex items-center justify-between rounded-xl px-4 py-3 text-base font-medium transition hover:bg-muted"
+                    onClick={handleClose}
+                  >
+                    {link.label}
+                    {isBagLink && cartCount > 0 ? (
+                      <span className="rounded-full bg-foreground px-2 py-0.5 text-xs text-primary-foreground">
+                        {cartCount}
+                      </span>
+                    ) : null}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
           <div className="border-t border-border p-5">
             <Link
