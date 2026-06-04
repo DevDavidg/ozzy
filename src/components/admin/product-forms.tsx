@@ -6,6 +6,7 @@ import {
 } from '@/app/admin/actions';
 import { Card, Checkbox, Field, SaveButton, TextArea } from '@/components/admin/admin-fields';
 import { DeleteConfirmButton } from '@/components/admin/delete-confirm-button';
+import { ProductImageField } from '@/components/admin/product-image-field';
 import type { SiteData, StoreCategory, StoreProduct } from '@/lib/types';
 
 export const ProductForms = ({ data }: { data: SiteData }) => (
@@ -64,7 +65,11 @@ const ProductForm = ({
       </select>
     </label>
     <div className="md:col-span-2">
-      <Field label="Imagen principal / URL local" name="imageUrl" defaultValue={product?.imageUrl ?? ''} />
+      <ProductImageField
+        label="Imagen principal / URL local"
+        name="imageUrl"
+        defaultValue={product?.imageUrl ?? ''}
+      />
     </div>
     <TextArea label="Descripción" name="description" defaultValue={product?.description ?? ''} />
     <Checkbox label="Visible" name="isVisible" defaultChecked={product?.isVisible ?? true} />
